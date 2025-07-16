@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery of My Madam Ji</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(
+                45deg,
+                #ff69b4,
+                #da70d6,
+                #9370db,
+                #ff1493,
+                #ff69b4,
+                #da70d6
+            );
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            padding: 20px;
+        }
+
+        .color-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            background: radial-gradient(
+                circle at center,
+                rgba(255, 255, 255, 0.2),
+                rgba(255, 20, 147, 0.1)
+            );
+        }
+
+        /* Rest of the styles remain the same as before */
+        .main-heading {
+            font-size: 52px;
+            font-family: 'Poppins', cursive;
+            text-align: center;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            animation: glow 2s infinite alternate, fadeIn 1.5s ease-in-out;
+            background: linear-gradient(90deg, #ffd700, #ff8c00, #ff4500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        @keyframes glow {
+            0% { 
+                text-shadow: 0 0 15px rgba(255, 215, 0, 0.8),
+                             0 0 25px rgba(255, 140, 0, 0.5);
+            }
+            50% { 
+                text-shadow: 0 0 30px rgb(255, 255, 255),
+                             0 0 45px rgba(255, 63, 239, 0.9);
+            }
+            100% { 
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.9),
+                             0 0 35px rgba(226, 37, 255, 0.7);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .gallery-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 1.5s infinite;
+            box-shadow: 0 0 5px #fff;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .shooting-star {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: shoot 3s linear infinite;
+            opacity: 0;
+            box-shadow: 0 0 10px #fff, 0 0 20px #fff;
+        }
+
+        @keyframes shoot {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(200%) translateY(200%) rotate(45deg);
+                opacity: 0;
+            }
+        }
+
+        .gallery {
+            display: flex;
+            gap: 30px;
+            perspective: 1000px;
+            animation: scroll 20s linear infinite;
+            padding: 20px;
+            width: max-content;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-250px * 10 - 300px)); }
+        }
+
+        .gallery:hover {
+            animation-play-state: paused;
+        }
+
+        .card {
+            position: relative;
+            width: 250px;
+            height: 380px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            transform-origin: center center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            flex-shrink: 0;
+        }
+
+        .card:hover {
+            transform: scale(1.1) translateY(-20px);
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .card-number {
+            font-size: 28px;
+            color: white;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .card-image {
+            width: 210px;
+            height: 240px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .card-image:hover {
+            transform: scale(1.05);
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .card-message {
+            color: white;
+            text-align: center;
+            font-size: 16px;
+            margin-bottom: 15px;
+            font-style: italic;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            line-height: 1.4;
+        }
+
+        .like-btn {
+            padding: 10px 25px;
+            background: rgba(255, 105, 180, 0.4);
+            border: 2px solid white;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .like-btn:hover {
+            background: rgba(255, 105, 180, 0.7);
+            transform: scale(1.1);
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 25px;
+            color: #ff1493;
+            pointer-events: none;
+            animation: float 1.5s ease-out;
+            opacity: 0;
+            text-shadow: 0 0 10px rgba(255, 20, 147, 0.5);
+            z-index: 1000;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-150px) translateX(30px) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* Pookie Button Styles */
+        .pookie-btn-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .pookie-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #f9c4ff, #ff9cee);
+            border: 3px solid white;
+            border-radius: 30px;
+            color: #9c27b0;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-shadow: 0 0 2px #fff;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Comic Sans MS', cursive;
+        }
+
+        .pookie-btn:hover {
+            transform: scale(1.05) rotate(-2deg);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .pookie-btn:before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transform: translateX(-100%);
+            animation: shimmer 3s infinite;
+            top: 0;
+            left: 0;
+        }
+
+        @keyframes shimmer {
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        /* Pookie Message Modal Styles */
+        .pookie-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            backdrop-filter: blur(8px);
+        }
+
+        .pookie-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .pookie-message-container {
+            position: relative;
+            width: 90%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            border: 3px solid white;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(255, 105, 180, 0.6);
+            transform: scale(0.9);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+        }
+
+        .pookie-modal.active .pookie-message-container {
+            transform: scale(1);
+        }
+
+        .pookie-message {
+            font-family: 'Comic Sans MS', cursive;
+            font-size: 28px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 25px;
+            line-height: 1.4;
+            position: relative;
+            z-index: 1;
+        }
+
+        .pookie-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.3);
+            border: 2px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pookie-close:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: rotate(90deg);
+        }
+
+        .pookie-decoration {
+            position: absolute;
+            font-size: 40px;
+            opacity: 0.4;
+            z-index: 0;
+        }
+
+        .pookie-heart1 {
+            top: 20px;
+            left: 20px;
+            transform: rotate(-15deg);
+        }
+
+        .pookie-heart2 {
+            bottom: 20px;
+            right: 20px;
+            transform: rotate(15deg);
+        }
+
+        .pookie-star1 {
+            top: 60px;
+            right: 40px;
+            transform: rotate(20deg);
+        }
+
+        .pookie-star2 {
+            bottom: 50px;
+            left: 30px;
+            transform: rotate(-10deg);
+        }
+
+        /* Mirror effect background */
+        .mirror-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(5deg) scale(1.1);
+            border-radius: 20px;
+            z-index: 0;
+        }
+
+        .mirror-effect:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.4) 0%,
+                rgba(255, 255, 255, 0) 50%,
+                rgba(255, 255, 255, 0.1) 100%
+            );
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="color-overlay"></div>
+    <h1 class="main-heading">✨ Gallery of My Madam Ji ✨</h1>
+    <div class="stars"></div>
+    <div class="gallery-container">
+        <div class="gallery">
+            <!-- Cards will be generated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Pookie Button -->
+    <div class="pookie-btn-container">
+        <button class="pookie-btn">🌸 Pookie 🌸</button>
+    </div>
+
+    <!-- Pookie Message Modal -->
+    <div class="pookie-modal">
+        <div class="pookie-message-container">
+            <div class="mirror-effect"></div>
+            <div class="pookie-decoration pookie-heart1">💕</div>
+            <div class="pookie-decoration pookie-heart2">💗</div>
+            <div class="pookie-decoration pookie-star1">✨</div>
+            <div class="pookie-decoration pookie-star2">✨</div>
+            <div class="pookie-close">×</div>
+            <div class="pookie-message">
+                You’re my favorite distraction, my sweetest motivation, and the reason behind so many of my smiles. 😊 Every little thing about you—your laughter, your warmth, the way you just get me—it all makes my heart do that happy little dance.🌈✨🥰
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const messages = [
+            "My Queen, My Everything! 👑💖",
+            "Your smile lights up my world ✨",
+            "Forever yours, my precious! 💝",
+            "You're my dream come true 🌙",
+            "My heart beats only for you 💓",
+            "My beautiful Madam Ji 🌹",
+            "You're my perfect match 💑",
+            "Love you to the moon & back 🌟",
+            "My world revolves around you 🌍",
+            "You're my heartbeat 💗"
+        ];
+        const images = [
+            "pic1.jpg",
+            "pic2.jpg",
+            "pic3.jpg",
+            "pic4.jpg",
+            "pic5.jpg",
+            "pic6.jpg",
+            "pic7.jpg",
+            "pic8.jpg",
+            "pic9.jpg",
+            "pic4.jpg"
+        ];
+
+        // Create stars
+        const starsContainer = document.querySelector('.stars');
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.animationDelay = `${Math.random() * 2}s`;
+            starsContainer.appendChild(star);
+        }
+
+        // Create shooting stars periodically
+        setInterval(() => {
+            const shootingStar = document.createElement('div');
+            shootingStar.className = 'shooting-star';
+            shootingStar.style.left = `${Math.random() * 100}%`;
+            shootingStar.style.top = `${Math.random() * 100}%`;
+            starsContainer.appendChild(shootingStar);
+            
+            setTimeout(() => {
+                shootingStar.remove();
+            }, 3000);
+        }, 2000);
+
+        // Create and duplicate gallery cards
+        const gallery = document.querySelector('.gallery');
+    
+        function createCard(index) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="card-number">💝</div>
+                <div class="card-image">
+                    <img src="${images[index % 10]}" alt="Image ${index % 10 + 1}">
+                </div>
+                <div class="card-message">${messages[index % 10]}</div>
+                <button class="like-btn">💖 Love</button>
+            `;
+            
+            const likeBtn = card.querySelector('.like-btn');
+            likeBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                createFloatingHearts(e.clientX, e.clientY);
+            });
+            
+            return card;
+        }
+
+        // Create initial set of cards
+        for (let i = 0; i < 10; i++) {
+            gallery.appendChild(createCard(i));
+        }
+
+        // Create duplicate set for smooth infinite scroll
+        for (let i = 0; i < 10; i++) {
+            gallery.appendChild(createCard(i));
+        }
+
+        function createFloatingHearts(x, y) {
+            for (let i = 0; i < 7; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '💖';
+                heart.style.left = `${x}px`;
+                heart.style.top = `${y}px`;
+                heart.style.animationDelay = `${i * 0.1}s`;
+                document.body.appendChild(heart);
+
+                setTimeout(() => {
+                    heart.remove();
+                }, 1500);
+            }
+        }
+
+        // Reset scroll position when animation ends
+        gallery.addEventListener('animationend', () => {
+            gallery.style.animation = 'none';
+            gallery.offsetHeight; // Trigger reflow
+            gallery.style.animation = 'scroll 20s linear infinite';
+        });
+
+        // Pookie Button Functionality
+        const pookieBtn = document.querySelector('.pookie-btn');
+        const pookieModal = document.querySelector('.pookie-modal');
+        const pookieClose = document.querySelector('.pookie-close');
+        
+        // Array of cute pookie messages
+        const pookieMessages = [
+            "You’re my favorite distraction, my sweetest motivation, and the reason behind so many of my smiles. 😊 Every little thing about you—your laughter, your warmth, the way you just get me—it all makes my heart do that happy little dance. 🌈✨🥰",
+           
+        ];
+        
+        // Show pookie modal with random message
+        pookieBtn.addEventListener('click', () => {
+            // Select random pookie message
+            const randomMessage = pookieMessages[Math.floor(Math.random() * pookieMessages.length)];
+            document.querySelector('.pookie-message').innerHTML = randomMessage;
+            
+            // Show modal with animation
+            pookieModal.classList.add('active');
+            
+            // Create floating hearts around the button
+            createFloatingHearts(
+                pookieBtn.getBoundingClientRect().left + pookieBtn.offsetWidth/2,
+                pookieBtn.getBoundingClientRect().top
+            );
+        });
+        
+        // Close pookie modal
+        pookieClose.addEventListener('click', () => {
+            pookieModal.classList.remove('active');
+        });
+        
+        // Also close when clicking outside the message
+        pookieModal.addEventListener('click', (e) => {
+            if (e.target === pookieModal) {
+                pookieModal.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Our Romantic Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes backgroundShimmer {
+            0% {
+                background-position: 0% 50%;
+                filter: hue-rotate(0deg);
+            }
+            50% {
+                background-position: 100% 50%;
+                filter: hue-rotate(10deg);
+            }
+            100% {
+                background-position: 0% 50%;
+                filter: hue-rotate(0deg);
+            }
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(45deg, 
+                #ff69b4, #da70d6, #9370db, #ff1493, #ff69b4);
+            background-size: 400% 400%;
+            animation: backgroundShimmer 15s ease infinite;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Playfair Display', serif;
+            overflow: hidden;
+            transition: opacity 0.5s ease;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            max-width: 900px;
+            width: 90%;
+            position: relative;
+        }
+
+        .main-heading {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(3.5rem, 7vw, 5.5rem);
+            color: white;
+            margin-bottom: 40px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8),
+                         0 0 25px rgba(255, 20, 147, 0.5),
+                         0 0 35px rgba(255, 20, 147, 0.3);
+            animation: glow 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        .main-heading::before,
+        .main-heading::after {
+            content: '❀';
+            position: absolute;
+            font-size: 0.5em;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.8);
+            text-shadow: 0 0 10px rgba(255, 20, 147, 0.5);
+        }
+
+        .main-heading::before {
+            left: -1em;
+            animation: floatLeft 3s ease-in-out infinite;
+        }
+
+        .main-heading::after {
+            right: -1em;
+            animation: floatRight 3s ease-in-out infinite;
+        }
+
+        @keyframes floatLeft {
+            0%, 100% { transform: translate(0, -50%) rotate(-15deg); }
+            50% { transform: translate(-10px, -50%) rotate(-5deg); }
+        }
+
+        @keyframes floatRight {
+            0%, 100% { transform: translate(0, -50%) rotate(15deg); }
+            50% { transform: translate(10px, -50%) rotate(5deg); }
+        }
+
+        .gif-container {
+            width: 331px;
+            height: 302px;
+            margin: 40px auto;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.4rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+                        0 0 20px rgba(255, 192, 203, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transform: perspective(1000px) rotateX(5deg);
+            transition: transform 0.3s ease;
+        }
+
+        .gif-container:hover {
+            transform: perspective(1000px) rotateX(0deg) scale(1.02);
+        }
+
+        .button-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 18px 35px;
+            font-size: 1.3rem;
+            font-family: 'Dancing Script', cursive;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            backdrop-filter: blur(5px);
+            transition: all 0.4s ease;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            min-width: 200px;
+            letter-spacing: 1px;
+        }
+
+        .btn::before {
+            content: '✦';
+            position: absolute;
+            left: 15px;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .btn::after {
+            content: '✦';
+            position: absolute;
+            right: 15px;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2),
+                        0 0 20px rgba(255, 192, 203, 0.4);
+            background: rgba(255, 255, 255, 0.25);
+            padding-left: 45px;
+            padding-right: 45px;
+        }
+
+        .btn:hover::before,
+        .btn:hover::after {
+            opacity: 1;
+        }
+
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 1.5s infinite;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            pointer-events: none;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                text-shadow: 0 0 15px rgba(255, 255, 255, 0.8),
+                            0 0 25px rgba(255, 20, 147, 0.5),
+                            0 0 35px rgba(255, 20, 147, 0.3);
+            }
+            50% {
+                text-shadow: 0 0 25px rgba(255, 255, 255, 1),
+                            0 0 35px rgba(255, 20, 147, 0.8),
+                            0 0 45px rgba(255, 20, 147, 0.5);
+            }
+        }
+
+        .fadeOut {
+            opacity: 0;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .gif-container {
+                width: 280px;
+                height: 280px;
+            }
+            
+            .button-container {
+                flex-direction: column;
+                gap: 20px;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 80%;
+                font-size: 1.2rem;
+            }
+
+            .main-heading::before,
+            .main-heading::after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="container">
+        <h1 class="main-heading">Welcome to Our Gallery</h1>
+        <div class="gif-container">
+            <img src="./kiss (1).gif">
+        </div>
+        <div class="button-container">
+            <button class="btn" id="colorBtn">Change Color</button>
+            <button class="btn" id="enterBtn">Enter Our World</button>
+        </div>
+    </div>
+
+    <script>
+        // Create stars
+        const starsContainer = document.querySelector('.stars');
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.animationDelay = `${Math.random() * 2}s`;
+            starsContainer.appendChild(star);
+        }
+
+        // Create floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '♥';
+            heart.style.left = `${Math.random() * 100}%`;
+            heart.style.top = `${Math.random() * 100}%`;
+            heart.style.animationDelay = `${Math.random() * 4}s`;
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 4000);
+        }
+
+        setInterval(createHeart, 2000);
+
+        // Color change functionality
+        const gradients = [
+            'linear-gradient(45deg, #ff69b4, #da70d6, #9370db, #ff1493, #ff69b4)',
+            'linear-gradient(45deg, #ff1493, #ff69b4, #da70d6, #9370db, #ff1493)',
+            'linear-gradient(45deg, #da70d6, #9370db, #ff1493, #ff69b4, #da70d6)',
+            'linear-gradient(45deg, #ff69b4, #ff1493, #da70d6, #9370db, #ff69b4)',
+            'linear-gradient(45deg, #9370db, #da70d6, #ff69b4, #ff1493, #9370db)'
+        ];
+
+        let currentGradient = 0;
+        const colorBtn = document.getElementById('colorBtn');
+        const body = document.body;
+
+        colorBtn.addEventListener('click', () => {
+            currentGradient = (currentGradient + 1) % gradients.length;
+            body.style.background = gradients[currentGradient];
+            body.style.backgroundSize = '400% 400%';
+        });
+
+        // Enter button functionality
+        const enterBtn = document.getElementById('enterBtn');
+        
+        enterBtn.addEventListener('click', () => {
+            body.classList.add('fadeOut');
+            setTimeout(() => {
+                // Navigate to next page
+                 window.location.href = 'gallery.html';
+                
+            }, 500);
+        });
+
+        // Remove transition class after animation
+        body.addEventListener('transitionend', () => {
+            if (body.classList.contains('fadeOut')) {
+                body.classList.remove('fadeOut');
+            }
+        });
+    </script>
+</body>
+</html>
